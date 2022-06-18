@@ -93,7 +93,9 @@ export default function DataTable({ meetings, serviceBodies }) {
             {
               rows.filter(
                 (pub) =>
-                  pub.service_body_bigint === row.id && pub.venue_type === "1"
+                  pub.service_body_bigint === row.id &&
+                  pub.venue_type === "1" &&
+                  pub.published === "1"
               ).length
             }
           </TableCell>
@@ -101,7 +103,9 @@ export default function DataTable({ meetings, serviceBodies }) {
             {
               rows.filter(
                 (pub) =>
-                  pub.service_body_bigint === row.id && pub.venue_type === "3"
+                  pub.service_body_bigint === row.id &&
+                  pub.venue_type === "3" &&
+                  pub.published === "1"
               ).length
             }
           </TableCell>
@@ -109,7 +113,9 @@ export default function DataTable({ meetings, serviceBodies }) {
             {
               rows.filter(
                 (pub) =>
-                  pub.service_body_bigint === row.id && pub.venue_type === "2"
+                  pub.service_body_bigint === row.id &&
+                  pub.venue_type === "2" &&
+                  pub.published === "1"
               ).length
             }
           </TableCell>

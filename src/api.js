@@ -3,3 +3,5 @@ export const getMeetings =
 
 export const getServiceBodies =
   "https://bmlt.ctna.org/client_interface/jsonp/?switcher=GetServiceBodies";
+
+export const getTomato = "https://tomato.bmltenabled.org/rest/v1/rootservers/";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useContext } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -13,8 +13,10 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GroupsIcon from "@mui/icons-material/Groups";
+import { AppContext } from "../context/AppContext";
 
 export default function DataTable({ meetings, serviceBodies }) {
+  const { serverData } = useContext(AppContext);
   const rows = [];
   serviceBodies.forEach((body) => {
     meetings.forEach((meeting) => {
@@ -287,109 +289,123 @@ export default function DataTable({ meetings, serviceBodies }) {
     );
   }
 
-  return (
-    <TableContainer
-      component={Paper}
-      sx={{
-        boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-        borderRadius: "10px",
-        marginTop: "2rem",
-        marginBottom: "2rem",
-      }}
-    >
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Area</TableCell>
-            <TableCell align="center">Published</TableCell>
-            <TableCell align="center">Unpublished</TableCell>
-            <TableCell align="center">
-              In Person
-              <br />
-              (Published)
-            </TableCell>
-            <TableCell align="center">
-              Hybrid
-              <br />
-              (Published)
-            </TableCell>
-            <TableCell align="center">
-              Virtual
-              <br />
-              (Published)
-            </TableCell>
-            <TableCell align="center" style={{ fontWeight: 600 }}>
-              Total
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {serviceBodies
-            .filter((b) => b.id !== "1")
-            .map((body) => (
-              <Row key={body.id} row={body} />
-            ))}
-          <TableRow style={{ backgroundColor: "#282c34" }}>
-            <TableCell>
-              <IconButton aria-label="expand row" size="small">
-                <GroupsIcon style={{ color: "#fff" }} />
-              </IconButton>
-            </TableCell>
-            <TableCell style={{ fontWeight: 600, color: "#fff" }}>
-              Connecticut Region
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {rows.filter((pub) => pub.published === "1").length}
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {rows.filter((pub) => pub.published === "0").length}
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {
-                rows.filter(
-                  (pub) => pub.published === "1" && pub.venue_type === "1"
-                ).length
-              }
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {
-                rows.filter(
-                  (pub) => pub.published === "1" && pub.venue_type === "3"
-                ).length
-              }
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {
-                rows.filter(
-                  (pub) => pub.published === "1" && pub.venue_type === "2"
-                ).length
-              }
-            </TableCell>
-            <TableCell
-              align="center"
-              style={{ fontWeight: 600, color: "#fff" }}
-            >
-              {rows.length}
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+  console.log(serverData);
+  if (Object.keys(serverData).length === 0) {
+    return (
+      <Typography variant="h2" sx={{ margin: "1rem 0" }}>
+        Please Select A Server
+      </Typography>
+    );
+  } else {
+    return (
+      <>
+        <Typography variant="h2" sx={{ margin: "1rem 0" }}>
+          {`Meetings In ${serverData.name}`}
+        </Typography>
+        <TableContainer
+          component={Paper}
+          sx={{
+            boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+            borderRadius: "10px",
+            marginTop: "2rem",
+            marginBottom: "2rem",
+          }}
+        >
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Area</TableCell>
+                <TableCell align="center">Published</TableCell>
+                <TableCell align="center">Unpublished</TableCell>
+                <TableCell align="center">
+                  In Person
+                  <br />
+                  (Published)
+                </TableCell>
+                <TableCell align="center">
+                  Hybrid
+                  <br />
+                  (Published)
+                </TableCell>
+                <TableCell align="center">
+                  Virtual
+                  <br />
+                  (Published)
+                </TableCell>
+                <TableCell align="center" style={{ fontWeight: 600 }}>
+                  Total
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {serviceBodies
+                .filter((b) => b.id !== "1")
+                .map((body) => (
+                  <Row key={body.id} row={body} />
+                ))}
+              <TableRow style={{ backgroundColor: "#282c34" }}>
+                <TableCell>
+                  <IconButton aria-label="expand row" size="small">
+                    <GroupsIcon style={{ color: "#fff" }} />
+                  </IconButton>
+                </TableCell>
+                <TableCell style={{ fontWeight: 600, color: "#fff" }}>
+                  Connecticut Region
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {rows.filter((pub) => pub.published === "1").length}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {rows.filter((pub) => pub.published === "0").length}
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {
+                    rows.filter(
+                      (pub) => pub.published === "1" && pub.venue_type === "1"
+                    ).length
+                  }
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {
+                    rows.filter(
+                      (pub) => pub.published === "1" && pub.venue_type === "3"
+                    ).length
+                  }
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {
+                    rows.filter(
+                      (pub) => pub.published === "1" && pub.venue_type === "2"
+                    ).length
+                  }
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{ fontWeight: 600, color: "#fff" }}
+                >
+                  {rows.length}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    );
+  }
 }

@@ -1,8 +1,11 @@
-import { Container } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import DataTable from "./components/DataTable";
-import { Header } from "./components/Header";
+import { Header } from "./components/global/Header";
 import { getServiceBodies, getMeetings } from "./api";
+import { AppProvider } from "./context/AppContext";
+import { theme } from "./global/theme";
+import { ThemeProvider } from "@mui/material/styles";
 const axios = require("axios");
 const jsonpAdapter = require("axios-jsonp");
 
@@ -35,14 +38,17 @@ function App() {
     return null;
   } else {
     return (
-      <div className="main">
-        <Header />
-        <Container maxWidth="lg">
-          <h2>Total Meetings in Connecticut: {meetings.length}</h2>
+      <ThemeProvider theme={theme}>
+        <AppProvider>
+          <CssBaseline />
+          <Header />
+          <Container maxWidth="lg">
+            {/* <h2>Total Meetings in Connecticut: {meetings.length}</h2> */}
 
-          <DataTable meetings={meetings} serviceBodies={serviceBodies} />
-        </Container>
-      </div>
+            <DataTable meetings={meetings} serviceBodies={serviceBodies} />
+          </Container>
+        </AppProvider>
+      </ThemeProvider>
     );
   }
 }

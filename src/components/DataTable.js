@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Collapse from "@mui/material/Collapse";
 import IconButton from "@mui/material/IconButton";
@@ -14,9 +14,46 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import GroupsIcon from "@mui/icons-material/Groups";
 import { AppContext } from "../context/AppContext";
+import axios from "axios";
+import { getMeetings, getServiceBodies } from "../api";
+const jsonpAdapter = require("axios-jsonp");
 
-export default function DataTable({ meetings, serviceBodies }) {
-  const { serverData } = useContext(AppContext);
+export default function DataTable() {
+  const { server, serverData } = useContext(AppContext);
+  const [meetings, setMeetings] = useState([]);
+  const [serviceBodies, setServiceBodies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const getData = async () => {
+      setIsLoading(true);
+      await axios({
+        url: server + getServiceBodies,
+        adapter: jsonpAdapter,
+      })
+        .then((res) => {
+          console.log("res", res.data);
+          setServiceBodies(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      await axios({
+        url: server + getMeetings,
+        adapter: jsonpAdapter,
+      })
+        .then((res) => {
+          setMeetings(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      setIsLoading(false);
+    };
+    if (server) {
+      getData();
+    }
+  }, [server]);
+
   const rows = [];
   serviceBodies.forEach((body) => {
     meetings.forEach((meeting) => {
@@ -58,9 +95,10 @@ export default function DataTable({ meetings, serviceBodies }) {
   ];
 
   function Row({ row }) {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
+
     return (
-      <React.Fragment>
+      <Fragment>
         {/* {serviceBodies.map((body) => ( */}
         <TableRow>
           <TableCell>
@@ -285,11 +323,15 @@ export default function DataTable({ meetings, serviceBodies }) {
             </Collapse>
           </TableCell>
         </TableRow>
-      </React.Fragment>
+      </Fragment>
     );
   }
 
-  console.log(serverData);
+  console.log("loading", isLoading);
+  console.log("serverData", serverData);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   if (Object.keys(serverData).length === 0) {
     return (
       <Typography variant="h2" sx={{ margin: "1rem 0" }}>
@@ -351,7 +393,7 @@ export default function DataTable({ meetings, serviceBodies }) {
                   </IconButton>
                 </TableCell>
                 <TableCell style={{ fontWeight: 600, color: "#fff" }}>
-                  Connecticut Region
+                  {serverData.name}
                 </TableCell>
                 <TableCell
                   align="center"

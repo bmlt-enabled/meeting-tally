@@ -1,7 +1,5 @@
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { getTomato } from "../api";
+import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
 export const ServerDropdown = ({ serverList, appChange }) => {

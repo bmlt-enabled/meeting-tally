@@ -13,8 +13,6 @@ function App() {
         <CssBaseline />
         <Header />
         <Container maxWidth="lg">
-          {/* <h2>Total Meetings in Connecticut: {meetings.length}</h2> */}
-
           <DataTable />
         </Container>
       </AppProvider>

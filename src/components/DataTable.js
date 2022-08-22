@@ -16,6 +16,9 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { getMeetings, getServiceBodies } from "../api";
+import { Spinner } from "./Spinner";
+import { PropagateLoader } from "react-spinners";
+import { styled } from "@mui/system";
 const jsonpAdapter = require("axios-jsonp");
 
 export default function DataTable() {
@@ -23,6 +26,7 @@ export default function DataTable() {
   const [meetings, setMeetings] = useState([]);
   const [serviceBodies, setServiceBodies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
       setIsLoading(true);
@@ -53,6 +57,13 @@ export default function DataTable() {
       getData();
     }
   }, [server]);
+
+  const spinnerStyles = {
+    top: "25%",
+    left: "50%",
+    position: "absolute",
+    transform: "translate(-50%, -50%)",
+  };
 
   const rows = [];
   serviceBodies.forEach((body) => {
@@ -330,7 +341,7 @@ export default function DataTable() {
   console.log("loading", isLoading);
   console.log("serverData", serverData);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <PropagateLoader cssOverride={spinnerStyles} />;
   }
   if (Object.keys(serverData).length === 0) {
     return (

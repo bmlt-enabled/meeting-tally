@@ -35,8 +35,18 @@ export default function DataTable() {
         adapter: jsonpAdapter,
       })
         .then((res) => {
-          console.log("res", res.data);
-          setServiceBodies(res.data);
+          console.log("service bodies", res.data);
+          // sort by name
+          const sorted = res.data.sort((a, b) => {
+            if (a.name < b.name) {
+              return -1;
+            }
+            if (a.name > b.name) {
+              return 1;
+            }
+            return 0;
+          });
+          setServiceBodies(sorted);
         })
         .catch((err) => {
           console.log(err);
@@ -46,6 +56,7 @@ export default function DataTable() {
         adapter: jsonpAdapter,
       })
         .then((res) => {
+          console.log("meetings", res.data);
           setMeetings(res.data);
         })
         .catch((err) => {

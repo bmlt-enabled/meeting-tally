@@ -16,9 +16,8 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import { AppContext } from "../context/AppContext";
 import axios from "axios";
 import { getMeetings, getServiceBodies } from "../api";
-import { Spinner } from "./Spinner";
 import { PropagateLoader } from "react-spinners";
-import { styled } from "@mui/system";
+import { MetaTags } from "react-meta-tags";
 const jsonpAdapter = require("axios-jsonp");
 
 export default function DataTable() {
@@ -363,6 +362,9 @@ export default function DataTable() {
   } else {
     return (
       <>
+        <MetaTags>
+          <title>{`${serverData.name} Meeting Tally`}</title>
+        </MetaTags>
         <Typography variant="h2" sx={{ margin: "1rem 0" }}>
           {`Meetings In ${serverData.name}`}
         </Typography>

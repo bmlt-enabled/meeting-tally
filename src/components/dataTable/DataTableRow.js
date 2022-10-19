@@ -14,10 +14,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { weekdays } from "../../data/weekdays";
 
-export const DataTableRow = ({ key, row, rows }) => {
+export const DataTableRow = ({ row, rows }) => {
   const [open, setOpen] = useState(false);
   return (
-    <Fragment key={key}>
+    <Fragment>
       {/* {serviceBodies.map((body) => ( */}
       <TableRow>
         <TableCell>

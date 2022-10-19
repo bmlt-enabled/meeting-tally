@@ -5,7 +5,6 @@ import { Header } from "./components/global/Header";
 import { AppProvider } from "./context/AppContext";
 import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material/styles";
-import { MetaTags } from "react-meta-tags";
 
 function App() {
   return (
@@ -14,9 +13,6 @@ function App() {
         <CssBaseline />
         <Header />
         <Container maxWidth="lg">
-          <MetaTags>
-            <title>BMLT Meeting Tally</title>
-          </MetaTags>
           <DataTable />
         </Container>
       </AppProvider>

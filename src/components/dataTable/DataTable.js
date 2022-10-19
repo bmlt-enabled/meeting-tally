@@ -14,7 +14,6 @@ import { AppContext } from "../../context/AppContext";
 import axios from "axios";
 import { getMeetings, getServiceBodies } from "../../api";
 import { PropagateLoader } from "react-spinners";
-import { MetaTags } from "react-meta-tags";
 import { DataTableRow } from "./DataTableRow";
 
 const jsonpAdapter = require("axios-jsonp");
@@ -33,7 +32,6 @@ export default function DataTable() {
         adapter: jsonpAdapter,
       })
         .then((res) => {
-          console.log("service bodies", res.data);
           // sort by name
           const sorted = res.data.sort((a, b) => {
             if (a.name < b.name) {
@@ -54,7 +52,6 @@ export default function DataTable() {
         adapter: jsonpAdapter,
       })
         .then((res) => {
-          console.log("meetings", res.data);
           setMeetings(res.data);
         })
         .catch((err) => {
@@ -109,9 +106,6 @@ export default function DataTable() {
   } else {
     return (
       <>
-        <MetaTags>
-          <title>{`${serverData.name} Meeting Tally`}</title>
-        </MetaTags>
         <Typography variant="h2" sx={{ margin: "1rem 0" }}>
           {`Meetings In ${serverData.name}`}
         </Typography>

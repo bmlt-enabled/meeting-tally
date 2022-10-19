@@ -15,8 +15,6 @@
     "axios-jsonp": "^1.0.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-meta-tags": "^1.0.1",
-    "react-scripts": "5.0.1",
     "react-spinners": "^0.13.4",
     "web-vitals": "^2.1.4"
   },
@@ -55,6 +53,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.5.1",
-    "gh-pages": "^3.2.3"
+    "gh-pages": "^3.2.3",
+    "react-scripts": "5.0.1"
   }
 }

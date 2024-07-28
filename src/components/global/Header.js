@@ -4,16 +4,16 @@ import { ServerDropdown } from "../ServerDropdown";
 import { styled } from "@mui/system";
 import { AppContext } from "../../context/AppContext";
 import axios from "axios";
-import { getTomato } from "../../api";
+import { getAggregator } from "../../api";
 
 export const Header = () => {
   const { server, setServer, setServerData } = useContext(AppContext);
   const [serverList, setServerList] = useState([]);
 
   useEffect(() => {
-    // query tomoato for all available servers
+    // query aggregator for all available servers
     axios
-      .get(getTomato)
+      .get(getAggregator)
       .then((res) => {
         // sort results by name
         const sorted = res.data.sort((a, b) => {
@@ -36,7 +36,7 @@ export const Header = () => {
   // on dropdown change, set the selected server url in the context
   function appChange(e) {
     const url = e.target.value;
-    const serverData = serverList.filter((svr) => svr.root_server_url === url);
+    const serverData = serverList.filter((svr) => svr.url === url);
     setServerData(serverData[0]);
     setServer(url);
   }

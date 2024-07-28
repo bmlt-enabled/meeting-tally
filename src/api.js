@@ -4,5 +4,5 @@ export const getMeetings =
 export const getServiceBodies =
   "/client_interface/jsonp/?switcher=GetServiceBodies";
 
-export const getTomato =
-  "https://tomato.bmltenabled.org/main_server/api/v1/rootservers";
+export const getAggregator =
+  "https://aggregator.bmltenabled.org/main_server/api/v1/rootservers";

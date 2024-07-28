@@ -16,7 +16,7 @@ export const ServerDropdown = ({ serverList, appChange }) => {
       >
         {serverList.length &&
           serverList.map((svr) => (
-            <MenuItem key={svr.source_id} value={svr.root_server_url}>
+            <MenuItem key={svr.id} value={svr.url}>
               {svr.name.toUpperCase()}
             </MenuItem>
           ))}

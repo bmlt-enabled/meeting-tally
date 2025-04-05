@@ -84,15 +84,50 @@ export default function DataTable() {
     });
   });
 
-  // get all parent service bodies
-  const parents = serviceBodyIds.filter(
-    (id) => !serviceBodyParentIds.includes(id)
-  );
+  // Create a map of child service bodies for each parent
+  const childrenMap = serviceBodies.reduce((acc, body) => {
+    if (body.parent_id && body.parent_id !== "0") {
+      if (!acc[body.parent_id]) {
+        acc[body.parent_id] = [];
+      }
+      acc[body.parent_id].push(body.id);
+    }
+    return acc;
+  }, {});
 
-  // remove all serviceBodies where id matches parent_id
-  const filteredServiceBodies = serviceBodies.filter((body) =>
-    parents.includes(body.id)
-  );
+  // Function to get all descendant service body IDs (recursive)
+  const getAllDescendants = (bodyId) => {
+    const descendants = [];
+    const children = childrenMap[bodyId] || [];
+    children.forEach((childId) => {
+      descendants.push(childId);
+      descendants.push(...getAllDescendants(childId));
+    });
+    return descendants;
+  };
+
+  // Function to get all meetings for a service body and its descendants
+  const getServiceBodyMeetings = (bodyId) => {
+    const descendants = getAllDescendants(bodyId);
+    return rows.filter(
+      (row) =>
+        row.service_body_bigint === bodyId ||
+        descendants.includes(row.service_body_bigint)
+    );
+  };
+
+  // Sort service bodies to show hierarchy
+  const filteredServiceBodies = serviceBodies
+    .filter((body) => body.id !== "1")
+    .sort((a, b) => {
+      // Sort by type first (ZF -> RS -> AS)
+      const typeOrder = { ZF: 1, RS: 2, AS: 3, MA: 4 };
+      if (typeOrder[a.type] !== typeOrder[b.type]) {
+        return typeOrder[a.type] - typeOrder[b.type];
+      }
+      // Then sort by name
+      return a.name.localeCompare(b.name);
+    });
 
   if (isLoading) {
     return <PropagateLoader cssOverride={spinnerStyles} />;
@@ -146,11 +181,14 @@ export default function DataTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredServiceBodies
-                .filter((b) => b.id !== "1")
-                .map((body) => (
-                  <DataTableRow key={body.id} row={body} rows={rows} />
-                ))}
+              {filteredServiceBodies.map((body) => (
+                <DataTableRow
+                  key={body.id}
+                  row={body}
+                  rows={rows}
+                  getServiceBodyMeetings={getServiceBodyMeetings}
+                />
+              ))}
               <TableRow style={{ backgroundColor: "#282c34" }}>
                 <TableCell>
                   <IconButton aria-label="expand row" size="small">

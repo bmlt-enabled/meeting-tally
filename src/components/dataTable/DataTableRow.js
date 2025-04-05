@@ -14,11 +14,13 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { weekdays } from "../../data/weekdays";
 
-export const DataTableRow = ({ row, rows }) => {
+export const DataTableRow = ({ row, rows, getServiceBodyMeetings }) => {
   const [open, setOpen] = useState(false);
+  const bodyMeetings = getServiceBodyMeetings(row.id);
+  const filterMeetings = (filters) => bodyMeetings.filter(filters).length;
+
   return (
     <Fragment>
-      {/* {serviceBodies.map((body) => ( */}
       <TableRow>
         <TableCell>
           <IconButton
@@ -33,61 +35,32 @@ export const DataTableRow = ({ row, rows }) => {
           {row.name}
         </TableCell>
         <TableCell align="center">
-          {
-            rows.filter(
-              (pub) =>
-                pub.service_body_bigint === row.id && pub.published === "1"
-            ).length
-          }
+          {filterMeetings((pub) => pub.published === "1")}
         </TableCell>
         <TableCell align="center">
-          {
-            rows.filter(
-              (pub) =>
-                pub.service_body_bigint === row.id && pub.published === "0"
-            ).length
-          }
+          {filterMeetings((pub) => pub.published === "0")}
         </TableCell>
         <TableCell align="center">
-          {
-            rows.filter(
-              (pub) =>
-                pub.service_body_bigint === row.id &&
-                pub.venue_type === "1" &&
-                pub.published === "1"
-            ).length
-          }
+          {filterMeetings(
+            (pub) => pub.published === "1" && pub.venue_type === "1"
+          )}
         </TableCell>
         <TableCell align="center">
-          {
-            rows.filter(
-              (pub) =>
-                pub.service_body_bigint === row.id &&
-                pub.venue_type === "3" &&
-                pub.published === "1"
-            ).length
-          }
+          {filterMeetings(
+            (pub) => pub.published === "1" && pub.venue_type === "3"
+          )}
         </TableCell>
         <TableCell align="center">
-          {
-            rows.filter(
-              (pub) =>
-                pub.service_body_bigint === row.id &&
-                pub.venue_type === "2" &&
-                pub.published === "1"
-            ).length
-          }
+          {filterMeetings(
+            (pub) => pub.published === "1" && pub.venue_type === "2"
+          )}
         </TableCell>
         <TableCell align="center" style={{ fontWeight: 600 }}>
-          {rows.filter((pub) => pub.service_body_bigint === row.id).length}
+          {bodyMeetings.length}
         </TableCell>
       </TableRow>
-      {/* ))} */}
       <TableRow>
-        <TableCell
-          style={{ paddingBottom: 0, paddingTop: 0, width: "100%" }}
-          colSpan={6}
-        >
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={8}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 2 }}>
               <Typography variant="h6" gutterBottom component="h6">
@@ -112,47 +85,35 @@ export const DataTableRow = ({ row, rows }) => {
                         {day.name}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "1" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "1" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "1" &&
+                            pub.venue_type === "1" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "1" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "3" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "1" &&
+                            pub.venue_type === "3" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "1" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "2" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "1" &&
+                            pub.venue_type === "2" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: 600 }}>
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "1" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "1" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -181,58 +142,43 @@ export const DataTableRow = ({ row, rows }) => {
                         {day.name}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "0" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "1" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "0" &&
+                            pub.venue_type === "1" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "0" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "3" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "0" &&
+                            pub.venue_type === "3" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "0" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.venue_type === "2" &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "0" &&
+                            pub.venue_type === "2" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center">
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "0" &&
-                              pub.service_body_bigint === row.id &&
-                              !pub.venue_type &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "0" &&
+                            !pub.venue_type &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: 600 }}>
-                        {
-                          rows.filter(
-                            (pub) =>
-                              pub.published === "0" &&
-                              pub.service_body_bigint === row.id &&
-                              pub.weekday_tinyint === day.id
-                          ).length
-                        }
+                        {filterMeetings(
+                          (pub) =>
+                            pub.published === "0" &&
+                            pub.weekday_tinyint === day.id
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}

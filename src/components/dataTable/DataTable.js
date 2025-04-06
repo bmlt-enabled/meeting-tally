@@ -90,7 +90,7 @@ export default function DataTable() {
       if (!acc[body.parent_id]) {
         acc[body.parent_id] = [];
       }
-      acc[body.parent_id].push(body.id);
+      acc[body.parent_id].push(body);
     }
     return acc;
   }, {});
@@ -99,9 +99,9 @@ export default function DataTable() {
   const getAllDescendants = (bodyId) => {
     const descendants = [];
     const children = childrenMap[bodyId] || [];
-    children.forEach((childId) => {
-      descendants.push(childId);
-      descendants.push(...getAllDescendants(childId));
+    children.forEach((child) => {
+      descendants.push(child.id);
+      descendants.push(...getAllDescendants(child.id));
     });
     return descendants;
   };
@@ -116,9 +116,9 @@ export default function DataTable() {
     );
   };
 
-  // Sort service bodies to show hierarchy
-  const filteredServiceBodies = serviceBodies
-    .filter((body) => body.id !== "1")
+  // Get top level service bodies (those with parent_id "0" or not in any parent_id)
+  const topLevelBodies = serviceBodies
+    .filter((body) => body.parent_id === "0" || body.parent_id === "")
     .sort((a, b) => {
       // Sort by type first (ZF -> RS -> AS)
       const typeOrder = { ZF: 1, RS: 2, AS: 3, MA: 4 };
@@ -181,12 +181,14 @@ export default function DataTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredServiceBodies.map((body) => (
+              {topLevelBodies.map((body) => (
                 <DataTableRow
                   key={body.id}
                   row={body}
                   rows={rows}
                   getServiceBodyMeetings={getServiceBodyMeetings}
+                  childBodies={childrenMap[body.id] || []}
+                  childrenMap={childrenMap}
                 />
               ))}
               <TableRow style={{ backgroundColor: "#282c34" }}>
